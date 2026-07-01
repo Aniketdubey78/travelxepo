@@ -5,11 +5,10 @@ const getApiUrl = (): string => {
     if (window.location.hostname === 'localhost') {
       return 'http://localhost:4000/api';
     }
-    // Production environment - Update with your backend URL
-    // Currently configured as a placeholder - update when backend is deployed
-    return 'https://your-backend-domain.vercel.app/api';
+    // Production environment
+    return 'https://backend-olive-six-72.vercel.app/api';
   }
-  return 'https://your-backend-domain.vercel.app/api';
+  return 'https://backend-olive-six-72.vercel.app/api';
 };
 
 export const url: string = getApiUrl();
