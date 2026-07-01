@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+import { SocketService } from './socket.service';
 import { Observable } from 'rxjs';
 import {url} from '../config';
 import { HttpClient } from '@angular/common/http';
@@ -11,42 +11,42 @@ export class ForumSocketServiceService {
 
   private foremurl = url + '/forum'
 
-   constructor(private socket: Socket, private http: HttpClient) { }
+   constructor(private socketService: SocketService, private http: HttpClient) { }
 
   connectSocket(): void {
-    this.socket.connect();
+    this.socketService.connect();
   }
 
   getInitialForums(): void {
-    this.socket.emit('fetch_initial_forums');
+    this.socketService.emit('fetch_initial_forums');
   }
 
   onInitialForumsLoaded(): Observable<any[]> {
-    return this.socket.fromEvent<any[]>('initial_forums_loaded');
+    return this.socketService.on('initial_forums_loaded');
   }
 
   createNewForum(title: string, description: string, category: string): void {
-    this.socket.emit('create_new_forum', { title, description, category });
+    this.socketService.emit('create_new_forum', { title, description, category });
   }
 
   onNewForumCreated(): Observable<any> {
-    return this.socket.fromEvent<any>('forum_created_global');
+    return this.socketService.on('forum_created_global');
   }
 
   joinForum(forumId: string, userId: string): void {
-    this.socket.emit('join_forum_room', { forumId, userId });
+    this.socketService.emit('join_forum_room', { forumId, userId });
   }
 
   sendMessage(forumId: string, userId: string, message: string): void {
-    this.socket.emit('send_forum_message', { forumId, userId, message });
+    this.socketService.emit('send_forum_message', { forumId, userId, message });
   }
 
   getMessages(): Observable<any> {
-    return this.socket.fromEvent<any>('receive_forum_message');
+    return this.socketService.on('receive_forum_message');
   }
 
   onError(): Observable<any> {
-    return this.socket.fromEvent<any>('error_occurred');
+    return this.socketService.on('error_occurred');
   }
 
   fetchrecentforem(){

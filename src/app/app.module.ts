@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { CommonModule } from '@angular/common';
 import { withFetch, withInterceptors } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,8 +32,7 @@ import { TrendingpageComponent } from './component/trendingpage/trendingpage.com
 import { ForumsPageComponent } from './component/forums-page/forums-page.component';
 
 
-const config: SocketIoConfig = { url: 'http://localhost:4000', options: { transports: ['websocket','polling'], 
-    autoConnect: false} };
+
 
 @NgModule({
   declarations: [
@@ -67,8 +65,7 @@ const config: SocketIoConfig = { url: 'http://localhost:4000', options: { transp
     MatButtonModule,
     FormsModule,
     BrowserAnimationsModule,
-      SocketIoModule.forRoot(config),
-       ToastrModule.forRoot({
+    ToastrModule.forRoot({
       timeOut: 5000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,

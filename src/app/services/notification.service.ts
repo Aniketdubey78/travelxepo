@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable ,Inject,PLATFORM_ID } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+import { SocketService } from './socket.service';
 import { ToastrService } from 'ngx-toastr';
 import {url} from '../config';
 import { HttpClient , HttpParams} from '@angular/common/http';
@@ -18,7 +18,7 @@ export class NotificationService {
 
   constructor(
     private toastr: ToastrService,
-    private socket: Socket,
+    private socketService: SocketService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private http: HttpClient
   ) {
@@ -41,7 +41,7 @@ export class NotificationService {
   }
 
   private initSocketSetup() {
-    this.socket.connect();
+    this.socketService.connect();
    
     this.setupStatusListeners();
 
@@ -58,15 +58,11 @@ export class NotificationService {
 
       if (userId) {
      
-        if (this.socket.ioSocket.connected) {
+        if (this.socketService.isConnected()) {
           this.emitJoinRoom(userId);
         }
 
-        this.socket.removeAllListeners('connect');
-        this.socket.ioSocket.removeAllListeners('connect');
-
-      
-        this.socket.on('connect', () => {
+        this.socketService.on('connect').subscribe(() => {
           this.emitJoinRoom(userId);
         });
       }
@@ -77,26 +73,26 @@ export class NotificationService {
 
   private emitJoinRoom(userId: string) {
     
-    this.socket.emit("join_room", { userId: userId });
+    this.socketService.emit("join_room", { userId: userId });
     console.log('Room join event emitted for userId:', userId);
   }
 
   private setupStatusListeners() {
    
-    this.socket.ioSocket.on('connect', () => {
+    this.socketService.on('connect').subscribe(() => {
       console.log('Connected to Socket.IO server');
     });
 
-    this.socket.ioSocket.on('disconnect', () => {
+    this.socketService.on('disconnect').subscribe(() => {
       console.log('Disconnected from Socket.IO server');
     });
 
-    this.socket.ioSocket.on('connect_error', (error: any) => {
+    this.socketService.on('connect_error').subscribe((error: any) => {
       console.error('Connection error:', error);
     });
 
     
-    this.socket.on('connected', (data: any) => {
+    this.socketService.on('connected').subscribe((data: any) => {
       console.log('Server acknowledgment:', data?.message);
     });
   }
@@ -104,11 +100,11 @@ export class NotificationService {
   
 
   listentoNotification(): Observable<any> {
-    return this.socket.fromEvent('notification_received');
+    return this.socketService.on('notification_received');
   }
 
   listentoprivatenotification(): Observable<any> {
-    return this.socket.fromEvent('private-notification');
+    return this.socketService.on('private-notification');
   }
 
   fetchallnotifications(page:number, limit:number): Observable<any[]> {
