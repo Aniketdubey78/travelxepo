@@ -6,9 +6,9 @@ const getApiUrl = (): string => {
       return 'http://localhost:4000/api';
     }
     // Production environment
-    return 'https://travelxepo-backend.vercel.app/api';
+    return 'https://backend-45j4wm4fw-aniketdubey17897-1439s-projects.vercel.app/api';
   }
-  return 'https://travelxepo-backend.vercel.app/api';
+  return 'https://backend-45j4wm4fw-aniketdubey17897-1439s-projects.vercel.app/api';
 };
 
 export const url: string = getApiUrl();
