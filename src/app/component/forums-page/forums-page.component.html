@@ -1,0 +1,103 @@
+<div class="forum-container" style="max-width: 900px; margin: 0 auto; padding: 20px; font-family: sans-serif;">
+  
+ 
+  <header class="forum-header" style="background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <h1 style="margin: 0 0 10px 0;">🌐 Ultimate Travel Discussion Hub</h1>
+    <p style="margin: 0; font-size: 1.1rem; opacity: 0.9;">Real-time database active. Ask questions, post itineraries, or text live with other global travellers.</p>
+    <div style="margin-top: 15px; display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem;">
+      Logged in as ID: <strong>{{ currentUserId }}</strong>
+    </div>
+  </header>
+
+  
+  <div style="margin-bottom: 30px; text-align: right;">
+    <button (click)="showForm = !showForm" style="background: #2e7d32; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      {{ showForm ? '❌ Close Creator' : '➕ Create New Forum Topic' }}
+    </button>
+
+    <div *ngIf="showForm" style="text-align: left; background: #fdfdfd; border: 1px dashed #2e7d32; border-radius: 8px; padding: 20px; margin-top: 15px;">
+      <h3 style="margin-top: 0; color: #2e7d32;">Start a Live Travel Thread</h3>
+      
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 5px;">Discussion Title:</label>
+        <input type="text" [(ngModel)]="newForumTitle" placeholder="e.g., Backpacking Vietnam on a $300 budget" style="width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 5px;">Category:</label>
+        <select [(ngModel)]="newForumCategory" style="width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background: white;">
+          <option value="General">General Talk</option>
+          <option value="Budget Travel">Budget Travel</option>
+          <option value="Beach Vacations">Beach Vacations</option>
+          <option value="Adventure">Adventure Trekking</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 5px;">Details/Description:</label>
+        <textarea [(ngModel)]="newForumDescription" rows="3" placeholder="Provide background context for your discussion room..." style="width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: none; font-family: sans-serif;"></textarea>
+      </div>
+
+      <button (click)="onCreateForumSubmit()" style="background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; font-weight: bold;">Launch Live Thread</button>
+    </div>
+  </div>
+
+  
+  <section class="forum-list-section">
+    <h2 style="color: #333; margin-bottom: 20px;">💬 Active Travel Streams ({{ forums.length }})</h2>
+
+   
+    <div *ngIf="forums.length === 0" style="text-align: center; color: #999; padding: 40px; border: 2px dashed #ccc; border-radius: 8px;">
+      No travel forums found in the database. Be the pioneer to create one!
+    </div>
+    
+    <div *ngFor="let forum of forums" class="forum-card" style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+      
+      
+      <div (click)="toggleForumDropdown(forum._id)" style="padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fdfdfd;">
+        <div>
+          <span style="background: #e1f5fe; color: #0288d1; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">{{ forum.category }}</span>
+          <h3 style="margin: 8px 0 4px 0; color: #222;">{{ forum.title }}</h3>
+          <small style="color: #888;">Topic ID: {{ forum._id }}</small>
+        </div>
+        <span style="font-size: 1.2rem;">
+          {{ activeForumId === forum._id ? '🔼' : '🔽' }}
+        </span>
+      </div>
+
+      
+      <div *ngIf="activeForumId === forum._id" style="padding: 20px; border-top: 1px solid #eee; background: #fafafa;">
+        <div style="background: #eef2f7; padding: 12px; border-radius: 6px; border-left: 4px solid #1e3c72; margin-bottom: 15px; color: #444; font-size: 0.95rem;">
+          <strong>Context:</strong> {{ forum.description }}
+        </div>
+        
+       
+        <div style="border: 1px solid #ddd; border-radius: 6px; background: white;">
+          
+         
+          <div style="height: 220px; overflow-y: auto; padding: 15px; background: #f9f9f9;">
+            <div *ngIf="!forum.messages || forum.messages.length === 0" style="color: #999; text-align: center; margin-top: 80px; font-size: 0.9rem;">
+              Database stream empty. Send a message to seed this room!
+            </div>
+            
+            <div *ngFor="let msg of forum.messages" style="margin-bottom: 12px;">
+              <span [style.color]="msg.userId === currentUserId ? '#0288d1' : '#e65100'" style="font-weight: bold; font-size: 0.85rem;">
+                {{ msg.userId === currentUserId ? 'You' : msg.userId }}:
+              </span>
+              <span style="font-size: 0.9rem; color: #333; margin-left: 5px;">{{ msg.message }}</span>
+              <small style="display:block; color:#aaa; font-size: 0.7rem; margin-left: 2px;">{{ msg.timestamp | date:'shortTime' }}</small>
+            </div>
+          </div>
+
+          
+          <div style="display: flex; border-top: 1px solid #ddd; padding: 10px;">
+            <input type="text" [(ngModel)]="newMessageText" placeholder="Type a message into the stream..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 0.9rem;" (keyup.enter)="onSendMessage(forum._id)">
+            <button (click)="onSendMessage(forum._id)" style="background: #1e3c72; color: white; border: none; padding: 0 20px; margin-left: 10px; border-radius: 4px; cursor: pointer; font-weight: bold;">Send</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>

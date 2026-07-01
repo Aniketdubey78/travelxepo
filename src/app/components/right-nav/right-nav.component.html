@@ -1,0 +1,52 @@
+<!-- Container Layout (Max width compressed for strict sidebar fitting) -->
+<div class="w-full max-w-xs sm:max-w-sm mx-auto p-3.5 pr-12 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 shadow-[0_4px_24px_0_rgba(31,38,135,0.04)] flex flex-col gap-2">
+  
+  <!-- Mini Header Section -->
+  <div class="flex items-center justify-between border-b border-white/20 pb-2 mb-0.5">
+    <h3 class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest px-0.5">Recent Activity</h3>
+    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-blue-500/10 text-blue-600 border border-blue-500/20 whitespace-nowrap">
+      {{ notifications.length }} Live
+    </span>
+  </div>
+
+  <div *ngFor="let notif of notifications" 
+       class="group flex items-center justify-between bg-white/40 backdrop-blur-xs p-2.5 rounded-lg border border-white/40 shadow-[0_1px_6px_rgba(0,0,0,0.005)] hover:bg-white/70 hover:border-blue-400/40 hover:shadow-[0_2px_12px_rgba(59,130,246,0.04)] hover:-translate-y-0.5 transition-all duration-200 ease-out cursor-pointer min-w-0">
+    
+   
+    <div class="flex items-center gap-2.5 flex-1 min-w-0">
+      
+      
+      <div class="w-8 h-8 flex items-center justify-center bg-white/60 group-hover:bg-blue-500/10 rounded-lg text-base shadow-inner border border-white/50 flex-shrink-0 transition-colors duration-200">
+        {{ notif.icon }}
+      </div>
+
+     
+      <div class="flex flex-col min-w-0 leading-tight">
+       
+        <p class="text-xs font-bold text-slate-700 truncate group-hover:text-blue-900 transition-colors duration-200" title="{{ notif.displaymessage }}">
+          {{ notif.displaymessage }}
+        </p>
+        
+       
+        <span class="text-[10px] text-slate-400 font-semibold truncate">
+          By: <span class="text-slate-600 font-bold group-hover:text-blue-700 transition-colors duration-200">{{ notif.ownername }}</span>
+        </span>
+      </div>
+    </div>
+
+    
+    <div class="ml-2.5 flex-shrink-0">
+      <span class="text-[9px] font-bold text-slate-400 bg-white/50 border border-white/60 px-1.5 py-0.5 rounded md whitespace-nowrap shadow-[0_1px_2px_rgba(0,0,0,0.005)]">
+        {{ notif.createAt | timeago }}
+      </span>
+    </div>
+
+  </div>
+
+
+  <button *ngIf="notifications.length >= limit" 
+          (click)="loadnotification()" 
+          class="mt-1 text-[10px] font-extrabold text-blue-600 bg-white/50 hover:bg-blue-500 hover:text-white border border-white/60 hover:border-blue-500 transition-all duration-200 py-2 rounded-lg text-center shadow-xs backdrop-blur-xs active:scale-[0.98]">
+    Load More
+  </button>
+</div>

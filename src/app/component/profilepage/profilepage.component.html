@@ -1,0 +1,165 @@
+<!-- Main Parent Wrapper (Forced overflow-x-hidden for extreme mobile safety) -->
+<div class="min-h-screen bg-slate-50 text-slate-800 font-sans pb-16 lg:pb-8 overflow-x-hidden w-full">
+
+    <!-- Responsive Layout Column Flow -->
+    <div class="max-w-4xl mx-auto px-3 sm:px-6 py-6 flex flex-col gap-6 w-full">
+
+        <!-- 1. USER PROFILE CARD (Single column block flow for clean responsiveness) -->
+        <aside class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm w-full min-w-0">
+
+
+            <div class="flex flex-col items-center text-center pb-6 border-b border-slate-100 min-w-0">
+                <!-- Visual Avatar -->
+                <div
+                    class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 text-white font-bold text-2xl flex items-center justify-center shadow-md mb-4 flex-shrink-0">
+                    {{ userProfile?.name }}
+                </div>
+                <h2 class="text-xl font-bold text-slate-800 flex items-center gap-1.5 min-w-0 truncate">
+                    {{ userProfile?.name }}
+                    <span
+                        class="text-xs bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-semibold flex-shrink-0">Pro
+                        Explorer</span>
+                </h2>
+                <p class="text-xs text-slate-400 mt-1 select-all truncate w-full px-2">{{ userProfile?.email }}</p>
+            </div>
+
+            <!-- Quick Demographics Metadata Box -->
+            <div
+                class="flex flex-col sm:flex-row items-center justify-around gap-4 py-4 px-2 bg-slate-50 rounded-xl my-4 border border-slate-100 w-full text-center">
+                <div class="w-full sm:w-1/2">
+                    <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Age</span>
+                    <span class="text-base font-bold text-slate-700">{{ userProfile?.age }} Yrs</span>
+                </div>
+                <div class="hidden sm:block h-8 border-l border-slate-200"></div>
+                <div class="w-full sm:w-1/2 border-t border-slate-200 sm:border-t-0 pt-3 sm:pt-0">
+                    <span class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Gender</span>
+                    <span class="text-base font-bold text-slate-700 capitalize">{{ userProfile?.gender }}</span>
+                </div>
+            </div>
+
+
+            <div class="block lg:hidden w-full mt-2">
+                <button (click)="logoutSession()"
+                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-sm rounded-xl border border-rose-200/60 transition-all active:scale-95 focus:outline-none">
+                    <svg class="w-4 h-4 stroke-current stroke-2 fill-none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 01-3-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Logout Session
+                </button>
+            </div>
+
+        </aside>
+
+
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm w-full min-w-0">
+            <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-3.5 flex items-center gap-1.5">
+                ⚡ Recent Highlights
+            </h3>
+            <div class="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-none snap-x w-full">
+                <div *ngFor="let story of userstoriesdata"
+                    class="flex-shrink-0 w-24 snap-start cursor-pointer group text-center min-w-0">
+                    <div (click)="storyshowopen()"
+                        class="w-14 h-14 mx-auto rounded-full ring-2 ring-amber-500 p-0.5 group-hover:scale-105 transition-transform duration-200 shadow-sm bg-white overflow-hidden">
+                        <img [src]="story.storiesimages[0]" alt="Story cover"
+                            class="w-full h-full object-cover rounded-full" />
+                    </div>
+                    <div *ngIf="isstoryshow && story"
+                        class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-900/80 backdrop-blur-md p-4 animate-fade-in">
+                        <div
+                            class="relative w-full max-w-md bg-zinc-950 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl p-4 flex flex-col items-center justify-center min-h-[450px] sm:min-h-[550px]">
+
+                            <div
+                                class="absolute top-0 inset-x-0 p-4 flex items-center justify-between bg-gradient-to-b from-black/60 to-transparent z-20">
+
+                                <div class="flex items-center gap-2.5 text-white">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center font-bold text-xs">
+                                        Ex
+                                    </div>
+                                    <div>
+                                        <span class="block text-xs font-bold tracking-wide">Live Highlight</span>
+                                        <span class="block text-[10px] text-zinc-400 font-medium">Active Explorer
+                                            Story</span>
+                                    </div>
+                                </div>
+
+                                <button (click)="stroyshowclose()" type="button"
+                                    class="p-2 bg-white/10 hover:bg-rose-600/20 text-zinc-300 hover:text-rose-400 rounded-xl text-xs font-bold transition-all border border-white/10 active:scale-95 focus:outline-none"
+                                    aria-label="Close story viewer">
+                                    ✕ Close
+                                </button>
+                            </div>
+
+                            <div
+                                class="w-full flex-1 flex items-center justify-center overflow-hidden rounded-2xl bg-zinc-900 relative mt-12">
+
+                                <div
+                                    class="w-full h-full overflow-x-auto pb-1 flex items-center gap-4 scrollbar-none snap-x snap-mandatory">
+                                    <div *ngFor="let img of story.storiesimages; let idx=index "
+                                        class="w-full h-full flex-shrink-0 snap-center flex items-center justify-center relative">
+
+                                        <img [src]="img" [accessKey]="idx"
+                                            alt="Expanded high-resolution user highlight story media"
+                                            class="w-full h-full object-contain max-h-[70vh] select-none pointer-events-none rounded-xl" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="w-full text-center pt-3 text-[11px] text-zinc-500 font-medium tracking-wide">
+                                Swipe or scroll horizontally if multiple images occupy this timeline
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm w-full min-w-0">
+            <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-3.5 flex items-center gap-1.5">
+                🚌 Recent Journeys
+            </h3>
+        </section>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div *ngFor="let post of recentPosts"
+                class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow w-full min-w-0">
+                <div class="post-photos px-4 pb-4">
+                    <div class="grid grid-cols-3 gap-1 rounded-lg overflow-hidden border border-gray-100">
+                        <div class="photos-grid-3 aspect-square overflow-hidden bg-gray-100"
+                            *ngFor="let photo of post.image; let i = index">
+                            <img [src]="photo" alt="Post Photo {{i + 1}}"
+                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 flex-1 flex flex-col justify-between min-w-0">
+                    <div class="min-w-0">
+                        <div
+                            class="flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 mb-1.5 uppercase tracking-wide truncate">
+                            <span>📍 {{ post.routefrom }}</span> ➡️ <span>{{ post.routeto }}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-base leading-snug line-clamp-1 mb-1">{{ post.title }}
+                        </h4>
+                        <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-3">{{ post.summary }}</p>
+                    </div>
+                    <div
+                        class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-50 font-medium min-w-0 gap-2">
+                        <span class="truncate">🚌 {{ post.operator }}</span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<<div class="max-w-xl mx-auto p-6 rounded-xl shadow-lg mt-10 transition-colors duration-300" 
+     style="background-color: var(--bg-card); color: var(--text-main);">
+
+  <h2 class="text-2xl font-bold mb-4">📸 Create Your Story</h2>
+  
+ 
+  <div class="mb-4">
+    <label class="block text-sm font-medium mb-2" style="color: var(--text-muted);">Upload Images (Max 10)</label>
+    <input 
+      type="file" 
+      multiple 
+      accept="image/*" 
+      (change)="OnFileChange($event)"
+      [disabled]="storiesimages.length >= maxLimit"
+      class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 dark:file:bg-gray-700 dark:file:text-amber-400"
+    />
+  </div>
+
+ 
+  <div class="grid grid-cols-3 gap-2 mb-6">
+    <div *ngFor="let url of storiesimages; let i = index" class="relative group">
+      <img [src]="url" class="w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-600">
+      
+      <button 
+        (click)="removeImage(i)" 
+        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+        ✕
+      </button>
+    </div>
+  </div>
+
+  <button 
+    (click)="uploadStory()" 
+    [disabled]="storiesimages.length === 0"
+    class="w-full bg-amber-500 text-white font-bold py-3 rounded-lg hover:bg-amber-600 disabled:bg-gray-300 transition-colors">
+    Share Story ({{ storiesimages.length }}/10)
+  </button>
+</div>

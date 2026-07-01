@@ -1,0 +1,640 @@
+<div class="max-w-6xl mx-auto p-4 md:p-6 bg-slate-50 min-h-screen">
+
+
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-200">
+    <div>
+      <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wider">Travel Diary</p>
+      <h2 class="text-2xl font-bold text-slate-800">Journey Explorer Overview</h2>
+    </div>
+
+    <!-- Action Trigger for Multi-step Form -->
+    <div class="flex items-center justify-center p-4">
+      <img src="/assets/journeyexplore.jpg" alt="journeyexplore" class="max-h-30 w-auto object-cover">
+    </div>
+
+  </div>
+
+
+  <div
+    class="grid grid-cols-2 gap-2 w-full max-w-3xl mx-auto p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm">
+
+    <div class="flex items-center gap-5 justify-start text-zinc-500 dark:text-zinc-400 text-sm">
+
+      <button (click)="handleLike()"
+        class="group items-center gap-2 font-semibold text-rose-600 dark:text-rose-500 transition-colors focus:outline-none">
+        <div class="p-2 rounded-full group-hover:bg-rose-50 dark:group-hover:bg-rose-950/30 transition-colors">
+          {{isLiked ? '❤️' : '🤍'}}
+        </div>
+        <span>{{journeyobject?.likedcount}}</span>
+      </button>
+
+      <button (click)="handleSave()"
+        class=" group items-center  font-semibold hover:text-amber-600 dark:hover:text-amber-500 transition-colors focus:outline-none"
+        title="Save">
+        <div *ngIf="!isSaved"
+          class="p-2 rounded-full group-hover:bg-amber-50 dark:group-hover:bg-amber-950/30 transition-colors">
+          <svg class="w-5 h-5 fill-none stroke-current stroke-2 transition-transform duration-200 group-hover:scale-110"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+        </div>
+        <div *ngIf="isSaved"
+          class="p-2 rounded-full group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950/30 transition-colors">
+          <svg
+            class="w-5 h-5 fill-indigo-500 stroke-indigo-600 stroke-2 transition-transform duration-200 group-hover:scale-125"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+        </div>
+
+        <span class="hidden sm:inline">Save</span>
+      </button>
+
+      <button
+        class="group items-center  font-semibold hover:text-blue-600 dark:hover:text-blue-500 transition-colors focus:outline-none"
+        (click)="showModal()">
+        <div class="p-2 rounded-full group-hover:bg-blue-50 dark:group-hover:bg-blue-950/30 transition-colors">
+          <svg
+            class="w-5 h-5 fill-none stroke-current stroke-2 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8.684 10.742l4.632-2.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684zm-4.632-2.316l4.632 2.316m-4.632-2.316a3 3 0 11-5.367-2.684 3 3 0 015.367 2.684z" />
+          </svg>
+        </div>
+        <span class="hidden sm:inline">Share</span>
+      </button>
+    </div>
+
+
+    <div class="w-full max-w-5xl mx-auto">
+
+      <div
+        class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4  bg-white border border-slate-200 rounded-2xl shadow-sm">
+
+        <div class="flex items-center gap-3">
+
+          <div class="relative w-12 h-12 flex items-center justify-center flex-shrink-0">
+
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+
+              <circle class="text-slate-100 stroke-current" stroke-width="3" fill="none" r="16" cx="18" cy="18" />
+
+              <circle class="text-indigo-600 stroke-current transition-all duration-500 ease-out" stroke-width="3"
+                stroke-dasharray="100" [attr.stroke-dashoffset]="100 - completionPercentage" stroke-linecap="round"
+                fill="none" r="16" cx="18" cy="18" />
+            </svg>
+
+            <span class="absolute text-[10px] font-black text-indigo-700">
+              {{ completionPercentage }}%
+            </span>
+          </div>
+
+          <div>
+            <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-1.5">
+              Journey Story Tracker
+            </h3>
+            <p class="text-xs text-slate-500">
+              {{ completionPercentage === 100 ? 'All steps completed!' : 'Fill details to unlock features.' }}
+            </p>
+          </div>
+        </div>
+
+        <button (click)="openForm()"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex-shrink-0">
+          <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Open Journey Form
+        </button>
+
+      </div>
+    </div>
+
+
+  </div>
+
+  <div
+    class="max-w-xl mx-auto p-4 sm:p-6 bg-gradient-to-br from-amber-50/60 to-orange-50/40 border border-orange-200/60 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 w-full select-none italic font-serif tracking-wide">
+
+
+    <header
+      class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-orange-200/40 pb-4 w-full min-w-0">
+      <div class="min-w-0">
+
+        <h2 class="text-xl sm:text-2xl font-black text-amber-900 tracking-tight leading-none line-clamp-1">
+          {{ journeyobject?.title || '#supercooljourney' }}
+        </h2>
+
+        <p class="text-xs sm:text-sm text-amber-700 font-bold mt-1.5 flex items-center gap-1.5 truncate">
+          <span>📍 From: {{ journeyobject?.routefrom || 'Delhi' }}</span> ➔ <span>To: {{ journeyobject?.routeto ||
+            'Manali' }}</span>
+        </p>
+      </div>
+
+      <span
+        class="px-3 py-1 bg-white/80 border border-orange-200 text-orange-800 text-xs font-black rounded-full shadow-sm max-w-fit flex-shrink-0">
+        🚌 {{ journeyobject?.busoperator || 'Zingbus' }}
+      </span>
+    </header>
+
+    <div class="my-4 w-full h-44 sm:h-52 bg-amber-100 rounded-2xl overflow-hidden relative shadow-inner group">
+      <img [src]="journeyobject?.image?.[0] || 'https://unsplash.com'" alt="Journey scenery"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 select-none pointer-events-none" />
+
+
+      <div
+        class="absolute bottom-3 left-3 bg-slate-900/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+        <span>❤️</span>
+        <span class="font-sans font-bold">{{ journeyobject?.likedcount || 90 }} Likes</span>
+      </div>
+
+
+      <div
+        class="absolute top-3 right-3 bg-amber-500/90 text-white text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+        <span>⭐</span>
+        <span class="font-sans">{{ journeyobject?.rating || 1 }}.0</span>
+      </div>
+    </div>
+
+
+    <div class="flex flex-col gap-3.5 bg-white/70 border border-white/60 p-4 rounded-2xl shadow-sm w-full min-w-0">
+
+      <div class="min-w-0">
+        <span class="text-[10px] sm:text-xs font-black uppercase text-amber-800 tracking-widest block mb-1">
+          🌅 Journey Highlights:
+        </span>
+        <blockquote
+          class="text-sm font-semibold text-slate-700 border-l-2 border-amber-400 pl-2 leading-relaxed italic">
+          "{{ journeyobject?.highlight || 'Such a cool place an adventure and special beach side view.' }}"
+        </blockquote>
+      </div>
+
+      <div class="min-w-0 border-t border-dashed border-orange-100 pt-3">
+        <span class="text-[10px] sm:text-xs font-black uppercase text-amber-800 tracking-widest block mb-1">
+          📖 The Full Story:
+        </span>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium line-clamp-3">
+          {{ journeyobject?.fullstory || 'This journey was so suspicious for us we enjoy every pitshops of this
+          adventure trip...' }}
+        </p>
+      </div>
+
+
+      <div class="min-w-0 border-t border-dashed border-orange-100 pt-3" *ngIf="journeyobject?.pitshops?.length > 0">
+        <span class="text-[10px] sm:text-xs font-black uppercase text-amber-800 tracking-widest block mb-1.5">
+          📍 Explored Stopovers:
+        </span>
+
+        <div class="flex flex-wrap items-center gap-2 w-full">
+          <span *ngFor="let stop of journeyobject.pitshops"
+            class="inline-flex items-center text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-amber-100/60 border border-amber-200/40 text-amber-900 capitalize shadow-2xs">
+            🚩 {{ stop }}
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+
+    <footer class="flex items-center justify-between text-[11px] text-amber-800/60 font-semibold px-1 mt-4">
+      <span class="font-sans flex-shrink-0">{{ journeyobject?.createdAt | timeago }}</span>
+    </footer>
+
+  </div>
+
+
+  <div *ngIf="isFormOpen && currentpost"
+    class="bg-white border border-slate-200 shadow-xl rounded-2xl overflow-hidden transition-all duration-300 relative">
+
+
+    <!-- Close Button (Top Right Inside Card Content Box) -->
+    <button (click)="closeForm()"
+      class="absolute top-0 right-0 z-10 inline-flex items-end gap-1 px-3 py-1.5 bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 rounded-lg text-xs font-semibold transition-all border border-slate-200/60">
+      ✕
+    </button>
+    <div class="p-6 pt-12 flex flex-col items-center">
+
+      <div
+        class="w-20 h-20 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 shadow-sm relative group">
+        <div
+          class="absolute inset-0 bg-blue-500/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300">
+        </div>
+        <svg class="w-10 h-10 text-blue-500 transition-transform duration-300 group-hover:rotate-12" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
+      </div>
+
+      <div class="w-full bg-slate-50/50 rounded-xl p-4 border border-dashed border-slate-200">
+        <app-post-details-form [postid]="currentpost"></app-post-details-form>
+      </div>
+    </div>
+
+    <div class="bg-slate-50/40 border-t border-slate-100/80 px-6 py-3 text-center">
+      <p class="text-xs text-slate-500 tracking-wide">Keep adding metrics to unlock full details for other travellers.
+      </p>
+    </div>
+
+  </div>
+
+
+
+  <!-- Main View Content Section -->
+  <div class="w-full" *ngIf="formData">
+
+    <div class="imagecuresol relative w-full max-w-4xl mx-auto overflow-hidden rounded-2xl bg-zinc-900 group shadow-lg"
+      *ngIf="journeyobject">
+
+      <div class="flex transition-transform duration-500 ease-out h-[350px] sm:h-[450px]"
+        [style.transform]="'translateX(-' + (currentSlideIndex * 100) + '%)'">
+
+        <div class="w-full h-full flex-shrink-0 relative" *ngFor="let img of journeyobject.image; let i = index">
+
+          <img [src]="img" alt="Journey image {{ i + 1 }}"
+            class="w-full h-full object-cover select-none pointer-events-none" />
+
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="journeyobject.image.length > 1">
+
+        <button (click)="prevSlide()"
+          class="absolute left-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-white/80 hover:bg-white text-zinc-800 shadow-md backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-200 focus:outline-none z-10"
+          aria-label="Previous image">
+          <svg class="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+
+        <button (click)="nextSlide()"
+          class="absolute right-4 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-white/80 hover:bg-white text-zinc-800 shadow-md backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-200 focus:outline-none z-10"
+          aria-label="Next image">
+          <svg class="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          <button *ngFor="let dot of journeyobject.image; let idx = index" (click)="goToSlide(idx)"
+            class="w-2 h-2 rounded-full transition-all duration-300 focus:outline-none"
+            [class.bg-white]="idx === currentSlideIndex" [class.w-4]="idx === currentSlideIndex" [ngClass]="{
+                'bg-white w-4': idx === currentSlideIndex,
+                'bg-white/50 w-2': idx !== currentSlideIndex
+              }">
+          </button>
+
+
+        </div>
+      </ng-container>
+    </div>
+
+
+    <!-- Header Summary Card -->
+    <div
+      class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div class="space-y-2">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+          {{ formData.title || 'Your Journey Experience' }}
+        </h1>
+        <div class="flex flex-wrap gap-2 items-center text-sm">
+          <span class="bg-slate-900 text-white font-medium px-3 py-1 rounded-lg">
+            📍 {{ formData.routeFrom }} → {{ formData.routeTo }}
+          </span>
+          <span class="bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-lg border border-emerald-100"
+            *ngIf="getDurationInDays() > 0">
+            ⏳ {{ getDurationInDays() }} Days Trip
+          </span>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col sm:flex-row md:flex-col items-start gap-4 border-t md:border-t-0 border-slate-100 pt-4 md:pt-0 w-full md:w-auto">
+        <div class="space-y-1">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Overall Experience</span>
+          <div class="flex text-xl text-amber-400">
+            <span *ngFor="let _ of renderStars(formData.overallRating)">★</span>
+            <span *ngFor="let _ of renderStars(5 - formData.overallRating)" class="text-slate-200">☆</span>
+          </div>
+        </div>
+        <div *ngIf="formData.wouldRecommend"
+          class="bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-1">
+          ✓ Highly Recommended
+        </div>
+      </div>
+    </div>
+
+
+    <div class="space-y-4">
+
+
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm" *ngIf="hasFilledData('trip')">
+        <div (click)="toggleSection('trip')"
+          class="p-5 flex justify-between items-center cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">🚌 Trip & Transport Details</h2>
+          <span class="text-slate-400 transition-transform duration-200 text-sm"
+            [class.rotate-180]="activeSections.trip">▼</span>
+        </div>
+        <div class="p-6 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6"
+          *ngIf="activeSections.trip">
+          <div class="space-y-1" *ngIf="formData.routeFrom"><span
+              class="text-xs text-slate-400 block font-medium">From</span><span
+              class="text-sm font-bold text-slate-700">{{ formData.routeFrom }}</span></div>
+          <div class="space-y-1" *ngIf="formData.routeTo"><span
+              class="text-xs text-slate-400 block font-medium">To</span><span
+              class="text-sm font-bold text-slate-700">{{ formData.routeTo }}</span></div>
+          <div class="space-y-1" *ngIf="formData.startDate"><span class="text-xs text-slate-400 block font-medium">Start
+              Date</span><span class="text-sm font-bold text-slate-700">{{ formatDate(formData.startDate) }}</span>
+          </div>
+          <div class="space-y-1" *ngIf="formData.endDate"><span class="text-xs text-slate-400 block font-medium">End
+              Date</span><span class="text-sm font-bold text-slate-700">{{ formatDate(formData.endDate) }}</span></div>
+          <div class="space-y-1" *ngIf="formData.transportMode"><span
+              class="text-xs text-slate-400 block font-medium">Transport Mode</span><span
+              class="text-sm font-bold text-slate-700">{{ formData.transportMode }}</span></div>
+          <div class="space-y-1" *ngIf="formData.busOperator"><span
+              class="text-xs text-slate-400 block font-medium">Operator</span><span
+              class="text-sm font-bold text-slate-700">{{ formData.busOperator }}</span></div>
+          <div class="space-y-1" *ngIf="formData.busType"><span class="text-xs text-slate-400 block font-medium">Bus
+              Type</span><span class="text-sm font-bold text-slate-700">{{ formData.busType }}</span></div>
+          <div class="space-y-1" *ngIf="formData.rating > 0">
+            <span class="text-xs text-slate-400 block font-medium">Transport Rating</span>
+            <div class="flex text-amber-400 text-sm">
+              <span *ngFor="let _ of renderStars(formData.rating)">★</span>
+              <span *ngFor="let _ of renderStars(5 - formData.rating)" class="text-slate-200">☆</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+        *ngIf="hasFilledData('pitstops')">
+        <div (click)="toggleSection('pitstops')"
+          class="p-5 flex justify-between items-center cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">📍 Pitstops & Stopovers</h2>
+          <span class="text-slate-400 transition-transform duration-200 text-sm"
+            [class.rotate-180]="activeSections.pitstops">▼</span>
+        </div>
+        <div class="p-6 border-t border-slate-100" *ngIf="activeSections.pitstops">
+          <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="border border-slate-100 rounded-xl p-4 bg-slate-50" *ngFor="let pitstop of formData.pitstops">
+              <h4 class="font-bold text-slate-800 mb-1 text-sm">{{ pitstop.name }}</h4>
+              <h4 class="font-bold text-slate-800 mb-1 text-sm">{{ pitstop.duration }}</h4>
+              <p class="text-xs text-slate-600 mb-3 leading-relaxed">{{ pitstop.highlights }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+        *ngIf="hasFilledData('stays')">
+        <div (click)="toggleSection('stays')"
+          class="p-5 flex justify-between items-center cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">🏨 Stay & Dining</h2>
+          <span class="text-slate-400 transition-transform duration-200 text-sm"
+            [class.rotate-180]="activeSections.stays">▼</span>
+        </div>
+        <div class="p-6 border-t border-slate-100 space-y-6" *ngIf="activeSections.stays">
+
+          <div *ngIf="formData.hotels && formData.hotels.length > 0">
+            <h3 class="text-sm font-bold text-indigo-600 mb-3 uppercase tracking-wider">🏩 Accommodations</h3>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div class="border border-slate-200 rounded-xl p-4 bg-white" *ngFor="let hotel of formData.hotels">
+                <div class="flex justify-between items-start gap-2 mb-1">
+                  <h4 class="font-bold text-slate-800 text-sm">{{ hotel.name }}</h4>
+                  <span class="text-xs bg-indigo-50 font-bold text-indigo-600 px-2 py-0.5 rounded-md">₹{{
+                    hotel.pricePerNight }}/N</span>
+                </div>
+                <p class="text-xs text-slate-400 mb-2">📍 {{ hotel.location }}</p>
+                <p class="text-xs text-slate-600 mb-3">{{ hotel.highlights }}</p>
+                <div class="flex text-amber-400 text-xs" *ngIf="hotel.rating > 0">
+                  <span *ngFor="let _ of renderStars(hotel.rating)">★</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="formData.restaurants && formData.restaurants.length > 0" class="pt-4 border-t border-slate-100">
+            <h3 class="text-sm font-bold text-indigo-600 mb-3 uppercase tracking-wider">🍽️ Restaurants & Cafes</h3>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div class="border border-slate-200 rounded-xl p-4 bg-white"
+                *ngFor="let restaurant of formData.restaurants">
+                <div class="flex justify-between items-start gap-2 mb-1">
+                  <h4 class="font-bold text-slate-800 text-sm">{{ restaurant.name }}</h4>
+                  <span class="text-xs bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-md">₹{{
+                    restaurant.avgCost }}</span>
+                </div>
+                <p class="text-xs text-indigo-600 font-semibold mb-2">🥘 {{ restaurant.cuisine }}</p>
+                <p class="text-xs text-slate-600 mb-2"><span class="font-medium text-slate-800">Must Try:</span> {{
+                  restaurant.mustTryDishes }}</p>
+                <div class="flex text-amber-400 text-xs" *ngIf="restaurant.rating > 0">
+                  <span *ngFor="let _ of renderStars(restaurant.rating)">★</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- /section-content of Stay & Dining -->
+      </div> <!-- /section of Stay & Dining -->
+
+
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+        *ngIf="hasFilledData('adventures')">
+        <div (click)="toggleSection('adventures')"
+          class="p-5 flex justify-between items-center cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">🎯 Adventures & Activities</h2>
+          <span class="text-slate-400 transition-transform duration-200 text-sm"
+            [class.rotate-180]="activeSections.adventures">▼</span>
+        </div>
+        <div class="p-6 border-t border-slate-100" *ngIf="activeSections.adventures">
+          <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="border border-slate-200 rounded-xl p-4 bg-white" *ngFor="let adventure of formData.adventures">
+              <div class="flex justify-between items-start gap-2 mb-1">
+                <h4 class="font-bold text-slate-800 text-sm">{{ adventure.activityName || adventure.activity }}</h4>
+                <span class="text-xs bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-md">{{
+                  formatCurrency(adventure.cost) }}</span>
+              </div>
+              <p class="text-xs text-slate-400 mb-2">📍 {{ adventure.location }}</p>
+              <p class="text-xs text-slate-600">{{ adventure.experience || adventure.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+        *ngIf="hasFilledData('budget')">
+        <div (click)="toggleSection('budget')"
+          class="p-5 flex justify-between items-center cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">💰 Budget & Expenses</h2>
+          <span class="text-slate-400 transition-transform duration-200 text-sm"
+            [class.rotate-180]="activeSections.budget">▼</span>
+        </div>
+        <div class="p-6 border-t border-slate-100 space-y-4" *ngIf="activeSections.budget">
+          <div class="flex flex-col sm:flex-row gap-4 p-4 bg-slate-50 rounded-xl">
+            <div class="flex-1" *ngIf="formData.totalBudget > 0">
+              <span class="text-xs text-slate-400 block font-medium">Total Assigned Budget</span>
+              <span class="text-xl font-black text-slate-800">{{ formatCurrency(formData.totalBudget) }}</span>
+            </div>
+            <div class="flex-1" *ngIf="formData.valueForMoney > 0">
+              <span class="text-xs text-slate-400 block font-medium">Value for Money</span>
+              <div class="flex text-amber-400 text-base mt-1">
+                <span *ngFor="let _ of renderStars(formData.valueForMoney)">★</span>
+                <span *ngFor="let _ of renderStars(5 - formData.valueForMoney)" class="text-slate-200">☆</span>
+              </div>
+            </div>
+          </div>
+
+
+          <div *ngIf="formData.expenses && formData.expenses.length > 0" class="space-y-2">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Expense Breakdown</h3>
+            <div class="divide-y divide-slate-100 border border-slate-100 rounded-xl bg-white overflow-hidden">
+              <div class="flex justify-between items-center p-3 text-sm hover:bg-slate-50/50"
+                *ngFor="let expense of formData.expenses">
+                <div class="flex flex-col">
+                  <span class="font-semibold text-slate-700">{{ expense.category }}</span>
+                  <span class="text-xs text-slate-400">{{ expense.description }}</span>
+                </div>
+                <span class="font-mono font-bold text-slate-900">{{ formatCurrency(expense.amount) }}</span>
+              </div>
+            </div>
+          </div>
+
+
+          <div *ngIf="formData.moneySavingTips" class="p-4 bg-indigo-50 border border-indigo-100 rounded-xl flex gap-3">
+            <span class="text-xl">💡</span>
+            <div>
+              <h4 class="text-sm font-bold text-indigo-900 mb-0.5">Money Saving Strategy</h4>
+              <p class="text-xs text-indigo-700 leading-relaxed">{{ formData.moneySavingTips }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+        *ngIf="hasFilledData('story')">
+        <div (click)="toggleSection('story')"
+          class="p-5 flex justify-between items-center cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors">
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">📖 Traveler Diary Stories</h2>
+          <span class="text-slate-400 transition-transform duration-200 text-sm"
+            [class.rotate-180]="activeSections.story">▼</span>
+        </div>
+        <div class="p-6 border-t border-slate-100 space-y-6" *ngIf="activeSections.story">
+
+          <div *ngIf="formData.tripSummary" class="space-y-1.5">
+            <h3 class="text-sm font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">Trip Quick Summary</h3>
+            <p class="text-sm text-slate-600 leading-relaxed italic">{{ formData.tripSummary }}</p>
+          </div>
+
+          <div *ngIf="formData.fullStory" class="space-y-1.5 pt-2">
+            <h3 class="text-sm font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">Full Story Journey</h3>
+            <p class="text-sm text-slate-600 leading-relaxed whitespace-pre-line">{{ formData.fullStory }}</p>
+          </div>
+
+          <div *ngIf="formData.highlights && formData.highlights.length > 0" class="pt-4 border-t border-slate-100">
+            <h3 class="text-sm font-bold text-slate-800 mb-2">✨ Journey Highlights</h3>
+            <ul class="grid sm:grid-cols-2 gap-2">
+              <li *ngFor="let highlight of formData.highlights"
+                class="text-sm text-slate-600 flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg">
+                <span class="text-emerald-500">✓</span> {{ highlight }}
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="formData.challenges" class="p-4 bg-rose-50 border border-rose-100 rounded-xl">
+            <h4 class="text-sm font-bold text-rose-900 mb-0.5">⚠️ Obstacles & Challenges faced</h4>
+            <p class="text-xs text-rose-700 leading-relaxed">{{ formData.challenges }}</p>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+            <div *ngIf="formData.bestTimeToVisit" class="space-y-1">
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">🗓️ Best Seasonal Month to Visit
+              </h4>
+              <span class="text-sm font-semibold text-slate-800">{{ formData.bestTimeToVisit }}</span>
+            </div>
+
+            <div *ngIf="getRecommendedTravelers().length > 0" class="space-y-1">
+              <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">👥 Perfect Matches For</h4>
+              <div class="flex flex-wrap gap-1.5 mt-1">
+                <span class="text-xs bg-slate-100 font-medium text-slate-700 px-2.5 py-1 rounded-full"
+                  *ngFor="let traveler of getRecommendedTravelers()">
+                  {{ traveler }}
+                </span>
+                
+                <div *ngIf="formData.proTips"
+                class="p-4 bg-amber-50 border border-amber-100 rounded-xl flex gap-3 items-start">
+                <span class="text-xl">🎒</span>
+                <div>
+                  <h4 class="text-sm font-bold text-amber-900 mb-0.5">Pro Checklist Tips</h4>
+                  <p class="text-xs text-amber-700 leading-relaxed">{{ formData.proTips }}</p>
+                  </div>
+                  </div>
+                  
+                  </div> <!-- /section-content of Story -->
+                </div> <!-- /section of Story -->
+
+              </div> <!-- /space-y-4 Accordion Container -->
+            </div> <!-- /w-full Main Form filled Data block -->
+
+            <div class="reviews-container"
+              style="max-width: 600px; margin: 20px auto; padding: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+              <div class="reviews-header"
+                style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
+                <h3 style="margin: 0; color: #333; font-size: 1.25rem;">💬 Reviews & Comments ({{ reviewsList.length }})
+                </h3>
+              </div>
+
+              <div class="reviews-list-column" style="display: flex; flex-direction: column; gap: 15px;">
+
+                <div *ngIf="reviewsList.length === 0"
+                  style="text-align: center; padding: 30px; color: #999; background: #fafafa; border-radius: 8px; border: 1px dashed #ddd;">
+                  No reviews yet. Be the first to leave a feedback!
+                </div>
+
+                <div *ngFor="let review of reviewsList" class="review-card"
+                  style="display: flex; gap: 12px; background: #ffffff; border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s, box-shadow 0.2s;"
+                  onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.05)'"
+                  onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.02)'">
+
+                  <div class="user-avatar-circle"
+                    style="width: 42px; height: 42px; border-radius: 50%; background: #1e3c72; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0; text-transform: uppercase; box-shadow: 0 2px 5px rgba(30,60,114,0.2);">
+                    {{ (review?.username || review?.userId?.username || review?.userId || 'U').charAt(0) }}
+                  </div>
+
+                  <div class="review-content" style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                    <div
+                      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px;">
+                      <div>
+                        <span style="font-weight: 600; color: #1a202c; font-size: 0.95rem;">{{ review?.userId?.username || review?.username || review?.userId || 'Anonymous' }}</span>
+                        <small style="display: block; color: #718096; font-size: 0.75rem;">{{ review?.userId?.email || review?.email || 'No email' }}</small>
+                      </div>
+                      <span style="font-size: 0.8rem; color: #a0aec0;">
+                        {{ review?.createdAt ? (review.createdAt | date:'mediumDate') : '' }}
+                      </span>
+                    </div>
+
+                    <div
+                      style="margin-top: 6px; font-size: 0.95rem; color: #4a5568; line-height: 1.5; word-break: break-word;">
+                      {{ review.comment || review.content || review.message || 'No feedback text available.' }}
+                    </div>
+
+                    <div
+                      style="margin-top: 8px; border-top: 1px dashed #edf2f7; padding-top: 4px; display: flex; justify-content: flex-end;">
+                      <span style="font-size: 0.65rem; color: #cbd5e0; letter-spacing: 0.5px;">Ref ID: {{ review._id || review.id || '—' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+         

@@ -1,0 +1,193 @@
+<div class="page active" id="page-feed">
+    <div id="feed-layout">
+
+        <!-- CENTER FEED -->
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+
+            <!-- Sort bar (desktop only) -->
+            <div id="sort-bar">
+                <span class="sort-label">Filter:</span>
+                <select class="sort-select" id="sel-state">
+                    <option value="">All States</option>
+                    <option>Maharashtra</option>
+                    <option>Karnataka</option>
+                    <option>Kerala</option>
+                    <option>Himachal Pradesh</option>
+                    <option>Rajasthan</option>
+                    <option>Tamil Nadu</option>
+                    <option>Andhra Pradesh</option>
+                    <option>Goa</option>
+                </select>
+                <select class="sort-select" id="sel-city">
+                    <option value="">All Cities</option>
+                    <option>Mumbai</option>
+                    <option>Pune</option>
+                    <option>Bengaluru</option>
+                    <option>Delhi</option>
+                    <option>Manali</option>
+                    <option>Goa</option>
+                    <option>Jaipur</option>
+                    <option>Kochi</option>
+                </select>
+                <select class="sort-select" id="sel-sort">
+                    <option>Latest First</option>
+                    <option>Most Liked</option>
+                    <option>Most Commented</option>
+                    <option>Featured Only</option>
+                </select>
+                <div class="sort-sep"></div>
+                <button class="btn-primary" (click)="postform()">+ New Post</button>
+            </div>
+
+            <!-- Mobile filter toggle -->
+            <div id="mobile-filter-toggle">
+                <button class="filter-toggle-btn"><svg viewBox="0 0 24 24">
+                        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
+                    </svg>Filter & Sort</button>
+                <button class="btn-primary" style="margin-left:auto;">+ Post</button>
+            </div>
+            <div id="mobile-filter-drawer">
+                <select class="sort-select">
+                    <option value="">All States</option>
+                    <option>Maharashtra</option>
+                    <option>Karnataka</option>
+                    <option>Kerala</option>
+                </select>
+                <select class="sort-select">
+                    <option value="">All Cities</option>
+                    <option>Mumbai</option>
+                    <option>Bengaluru</option>
+                    <option>Delhi</option>
+                </select>
+                <select class="sort-select">
+                    <option>Latest First</option>
+                    <option>Most Liked</option>
+                </select>
+            </div>
+
+            <!-- Scrollable center -->
+            <div id="feed-center">
+
+                <!-- ====== STORIES STRIP ====== -->
+               
+   <div id="stories-strip" class="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 sm:p-5 my-4 sm:my-6 w-full max-w-3xl font-sans">
+    
+    <!-- Header remains same -->
+    <div class="stories-header flex items-center justify-between mb-4 sm:mb-5 px-1">
+        <h3 class="text-gray-900 font-extrabold text-base sm:text-lg flex items-center gap-2 italic tracking-tight">
+            <span class="text-lg sm:text-xl">✨</span> Traveler Stories
+        </h3>
+        <div class="stories-nav hidden sm:flex gap-2" >
+            <button (click)="scrollStories(-200)" class="p-2 rounded-full border border-gray-200 hover:bg-amber-50 transition-all active:scale-90">
+                <svg class="w-4 h-4 sm:w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6" /></svg>
+            </button>
+            <button (click)="scrollStories(200)" class="p-2 rounded-full border border-gray-200 hover:bg-amber-50 transition-all active:scale-90">
+                <svg class="w-4 h-4 sm:w-5 h-5 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6" /></svg>
+            </button>
+        </div>
+    </div> 
+
+    <div class="stories-viewport relative overflow-hidden">
+        <div class="stories-track flex gap-3 sm:gap-4 overflow-x-auto pb-4 no-scrollbar snap-x snap-mandatory scroll-smooth" id="stories-track" #storiesTrack>
+            
+            
+            <div class="story-add-card flex-shrink-0 snap-start group cursor-pointer" >
+                <div class="relative w-24 h-36 sm:w-28 sm:h-40 rounded-xl sm:rounded-2xl bg-gray-50 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-2 sm:gap-3 group-hover:border-amber-400 group-hover:bg-amber-50 transition-all duration-300">
+                    <div (click)="storyform()" class="w-10 h-10 sm:w-12 sm:h-12 bg-amber-500 rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6 sm:w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                    </div>
+                    <span class="text-[9px] sm:text-[11px] font-bold text-gray-500 group-hover:text-amber-700 uppercase tracking-widest">Add Story</span>
+                </div>
+            </div>
+
+           
+            <div *ngFor="let item of allstories; let i = index" 
+                 (click)="openstory(i)"
+                 class="story-card relative flex-shrink-0 w-24 h-36 sm:w-28 sm:h-40 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer group shadow-sm hover:shadow-xl transition-all duration-500 snap-start ring-2 ring-transparent hover:ring-amber-400">
+                
+                <div class="story-bg absolute inset-0">
+                    <img [src]="item?.storiesimages[0]" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="story-thumb">
+                </div>
+
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
+                
+                <!-- Avatar Ring -->
+                <div class="absolute top-2 left-2 sm:top-3 sm:left-3">
+                    <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white p-0.5 ring-2 ring-amber-500">
+                        <div class="w-full h-full bg-blue-600 rounded-full flex items-center justify-center text-[8px] sm:text-[10px] font-black text-white shadow-inner border border-white">
+                            {{ item.authorId?.username | avatar }}
+                        </div>
+                    </div>
+                </div>
+
+               
+                <div class="absolute bottom-2 left-2 right-2 truncate">
+                    <span class="text-white text-[9px] sm:text-[10px] font-bold">{{ item.authorId?.name }}</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    <!-- HIDDEN STORY VIEWER DIV (Modal) -->
+    <div *ngIf="istroryopen" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm transition-all duration-300">
+        
+        <!-- Blur Background -->
+        <div class="absolute inset-0 z-0">
+            <img [src]="activeimages" class="w-full h-full object-cover blur-3xl opacity-30">
+        </div>
+
+        <!-- Content Box -->
+        <div class="relative z-10 w-full max-w-md h-full sm:h-[90vh] bg-black sm:rounded-2xl overflow-hidden flex flex-col">
+            
+            <!-- Top Progress Bars -->
+            <div class="absolute top-3 left-0 right-0 px-3 flex gap-1 z-30">
+                <div *ngFor="let item of currentstoryItems; let i = index" class="h-1 flex-grow bg-orange-500/20 rounded-full overflow-hidden">
+                    <div class="h-full bg-orange-500 transition-all duration-100 ease-linear"
+                         [style.width.%]="i === currentimageindex ? progessivevalue : (i < currentimageindex ? 100 : 0)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Info & Close -->
+            <div class="absolute top-8 left-0 right-0 px-4 flex items-center justify-between z-30">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full border-2 border-amber-500 p-0.5">
+                        <div class="w-full h-full bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold text-white">{{ activeuser | avatar }}</div>
+                    </div>
+                    <span class="text-white font-bold text-sm">{{ activeuser }}</span>
+                </div>
+                <button (click)="closestory()" class="text-white/70 hover:text-white">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+
+            <!-- Image Viewer -->
+            <div class="flex-grow flex items-center justify-center relative">
+                <img [src]="activeimages" class="w-full max-h-full object-contain">
+                
+                <!-- Tap Navigation Areas -->
+                <div class="absolute inset-0 flex">
+                    <div class="w-1/3 h-full cursor-pointer" (click)="previmage()"></div>
+                    <div class="w-2/3 h-full cursor-pointer" (click)="nextimage()"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                         
+
+
+                <!-- ====== POSTS ====== -->
+                <app-post-template *ngFor="let post of allPosts" [posts]="post">
+                </app-post-template>
+
+            </div><!-- /feed-center -->
+        </div><!-- /flex col -->
+
+    </div><!-- /feed-layout -->
+<!-- /page-feed -->

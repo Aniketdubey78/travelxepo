@@ -1,0 +1,86 @@
+<!-- Main Wrapper: h-screen ensures zero scrolling -->
+<div class="relative h-screen w-full flex items-center justify-center overflow-hidden font-sans">
+  
+  <!-- Background Image Layer -->
+  <div class="absolute inset-0 z-0">
+    <!-- w-full h-full + object-cover image ko screen par stretch hone se bachayega -->
+    <img src="/assets/loginb.jpg" alt="Bus Background" class="w-full h-full object-center" />
+    <!-- Slightly stronger overlay for registration as it has more text fields -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
+  </div>
+
+  <!-- Registration Card: Padding aur gaps ko tight kiya gaya hai -->
+  <div class="relative z-10 w-full max-w-sm mx-4 bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-[2rem] shadow-2xl overflow-y-auto max-h-[96vh]">
+    
+    <div class="text-center mb-5">
+      <h2 class="text-2xl font-black text-white tracking-tight">Create Profile</h2>
+      <p class="text-gray-300 text-xs mt-1 font-medium">Join the BusBlog community</p>
+    </div>
+
+    <!-- Form: Spacing reduced from 4 to 3 to save vertical space -->
+    <form class="space-y-3" (ngSubmit)="signup()">
+      
+      <!-- Username -->
+      <div>
+        <input type="text" name="username" id="username" required placeholder="Username" 
+               class="w-full px-5 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+               [(ngModel)]="username">
+      </div>
+
+      <!-- Info Row: Age & Gender -->
+      <div class="flex gap-3">
+        <div class="flex-1">
+          <input type="number" name="age" id="age" required placeholder="Age" 
+                 class="w-full px-5 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+                 [(ngModel)]="age">
+        </div>
+        <div class="flex-[1.5]">
+          <select class="w-full px-5 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all appearance-none cursor-pointer" 
+                  name="gender" [(ngModel)]="gender">
+            <option value="" disabled selected>Gender</option>
+            <option value="male" class="text-gray-900">Male</option>
+            <option value="female" class="text-gray-900">Female</option>
+            <option value="other" class="text-gray-900">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <input type="email" name="email" id="email" required placeholder="Email Address" 
+               class="w-full px-5 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+               [(ngModel)]="email">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <input type="password" name="password" id="password" required placeholder="Password" 
+               class="w-full px-5 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" 
+               [(ngModel)]="password">
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" 
+              class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all active:scale-[0.96] mt-2 text-sm">
+        Sign Up
+      </button>
+
+      <!-- OR Separator -->
+      <div class="flex items-center py-1">
+        <div class="flex-grow border-t border-white/10"></div>
+        <span class="px-3 text-white/30 text-[9px] font-bold uppercase tracking-widest">OR</span>
+        <div class="flex-grow border-t border-white/10"></div>
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="text-center mt-5">
+      <p class="text-gray-400 text-xs">
+        Already have an account?
+        <button (click)="navigateToLogin()" class="text-orange-500 font-bold hover:text-orange-400 transition-colors ml-1 underline underline-offset-4">
+          Login
+        </button>
+      </p>
+    </div>
+  </div>
+</div>

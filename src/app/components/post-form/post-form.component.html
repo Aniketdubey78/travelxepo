@@ -1,0 +1,124 @@
+<div class="container mx-auto p-6 max-w-2xl bg-white shadow-2xl rounded-2xl border border-orange-100 my-10">
+  <h2 class="text-3xl font-bold text-orange-600 mb-8 text-center">Share Your Bus Journey</h2>
+
+  <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Post Title -->
+    <div class="relative md:col-span-2 group">
+      <input type="text" name="title" id="title"
+        class="peer w-full p-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-orange-500 outline-none transition-all placeholder-transparent"
+        placeholder="Post Title" [(ngModel)]="title">
+      <label for="title"
+        class="absolute left-4 top-1 text-xs font-semibold text-orange-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-orange-500">Post
+        Title</label>
+    </div>
+
+    <!-- Operator Name -->
+    <div class="relative group">
+      <input type="text" name="busoperator" id="Operatorname"
+        class="peer w-full p-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-orange-500 outline-none transition-all placeholder-transparent"
+        placeholder="Operator Name" [matMenuTriggerFor]="menuOp" [(ngModel)]="busoperator">
+      <label for="Operatorname"
+        class="absolute left-4 top-1 text-xs font-semibold text-orange-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-orange-500">Operator
+        Name</label>
+      <mat-menu #menuOp="matMenu">
+        <button mat-menu-item (click)="busoperator='Zingbus'">Zingbus</button>
+        <button mat-menu-item (click)="busoperator='IntrCity'">IntrCity</button>
+      </mat-menu>
+    </div>
+
+    <!-- Rating -->
+    <div class="relative group">
+      <input type="number" name="rating" id="Rating" min="1" max="5"
+        class="peer w-full p-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-orange-500 outline-none transition-all placeholder-transparent"
+        placeholder="Rating" [(ngModel)]="rating">
+      <label for="Rating"
+        class="absolute left-4 top-1 text-xs font-semibold text-orange-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-orange-500">Rating
+        (1-5)</label>
+    </div>
+
+    <!-- Departure Place -->
+    <div class="relative group">
+      <input type="text" name="routefrom" id="departureplace"
+        class="peer w-full p-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-orange-500 outline-none transition-all placeholder-transparent"
+        placeholder="Departure" [matMenuTriggerFor]="menuFrom" [(ngModel)]="routefrom">
+      <label for="departureplace"
+        class="absolute left-4 top-1 text-xs font-semibold text-orange-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-orange-500">Departure
+        Place</label>
+      <mat-menu #menuFrom="matMenu">
+        <button mat-menu-item (click)="formevent('Delhi')">Delhi</button>
+        <button mat-menu-item (click)="formevent('Mumbai')">Mumbai</button>
+      </mat-menu>
+    </div>
+
+    <!-- Arrival Place -->
+    <div class="relative group">
+      <input type="text" name="routeto" id="Arrival"
+        class="peer w-full p-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-orange-500 outline-none transition-all placeholder-transparent"
+        placeholder="Arrival" [matMenuTriggerFor]="menuTo" [(ngModel)]="routeto">
+      <label for="Arrival"
+        class="absolute left-4 top-1 text-xs font-semibold text-orange-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-orange-500">Arrival
+        Place</label>
+      <mat-menu #menuTo="matMenu">
+        <button mat-menu-item (click)="toevent('Manali')">Manali</button>
+        <button mat-menu-item (click)="toevent('Goa')">Goa</button>
+      </mat-menu>
+    </div>
+
+    <!-- Highlight -->
+    <div class="relative md:col-span-2 group">
+      <input type="text" name="highlight" id="highlist"
+        class="peer w-full p-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-orange-500 outline-none transition-all placeholder-transparent"
+        placeholder="Highlight" [(ngModel)]="highlight">
+      <label for="highlist"
+        class="absolute left-4 top-1 text-xs font-semibold text-orange-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-orange-500">Journey
+        Highlight</label>
+    </div>
+
+    <!-- Full Story -->
+    <div class="relative md:col-span-2 group">
+      <textarea name="fullstory" id="fullstory" rows="4"
+        class="peer w-full p-4 pt-6 border-2 border-gray-200 rounded-xl focus:border-orange-500 outline-none transition-all placeholder-transparent"
+        placeholder="Full Story" [(ngModel)]="fullstory"></textarea>
+      <label for="fullstory"
+        class="absolute left-4 top-1 text-xs font-semibold text-orange-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-xs peer-focus:text-orange-500">Tell
+        the Full Journey Story</label>
+    </div>
+
+    <!-- Journey Stops -->
+    <div class="md:col-span-2 space-y-4">
+      <div class="flex gap-2">
+        <input type="text" name="currentstop" [(ngModel)]="currentstop" (keyup.enter)="addpitshps()"
+          placeholder="Add a pit stop..."
+          class="w-full p-4 border-2 border-gray-200 rounded-xl outline-none focus:border-orange-500">
+        <button type="button" (click)="addpitshps()"
+          class="px-6 bg-orange-500 text-white font-bold rounded-xl active:scale-95">Add</button>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <span *ngFor="let stop of pitshops; let i = index"
+          class="px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm flex items-center gap-2">
+          {{ stop }}
+          <button type="button" (click)="removepitshop(i)" class="font-bold">&times;</button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Photos -->
+    <div class="md:col-span-2">
+      <label class="block text-sm font-bold text-orange-600 mb-2">Upload Journey Photos</label>
+      <label
+        class="flex flex-col w-full h-32 border-2 border-orange-200 border-dashed rounded-xl cursor-pointer hover:bg-orange-50 items-center justify-center">
+        <p class="text-sm text-gray-400">Click to upload image</p>
+        <input type="file" class="hidden" (change)="FileChange($event)" />
+        <div class="flex gap-2 mt-4">
+          <img *ngFor="let img of image" [src]="img" class="h-20 w-20 object-cover rounded">
+        </div>
+      </label>
+    </div>
+
+    <!-- Submit -->
+    <button type="button" (click)="submitPost()"
+      class="md:col-span-2 bg-orange-500 text-white font-bold py-4 rounded-xl hover:bg-orange-600 shadow-lg active:scale-95 transition-all">
+      Public Post Now
+    </button>
+  </form>
+</div>

@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "tailwindcss";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* styles.css */
+
+/* 1. Default (Light) Theme */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --card-bg: #f4f4f4;
+  --accent-color: #ff5722; /* BusBlog Orange */
+   --text-main: #1f2937; /* Gray-800 */
+  --text-muted: #4b5563; /* Gray-600 */
+}
+
+/* 2. Dark Theme Variables */
+[data-theme='dark'] {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --card-bg: #1e1e1e;
+  --accent-color: #ff7043;
+   --bg-card: #1f2937; /* Dark Gray */
+  --text-main: #f3f4f6; /* Light Gray */
+  --text-muted: #9ca3af; /* Muted Gray */
+}
+
+/* 3. Global Styles jo Variables use karenge */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease; /* Smooth transition ke liye */
+}
