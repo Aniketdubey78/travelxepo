@@ -5,10 +5,15 @@ const getApiUrl = (): string => {
     if (window.location.hostname === 'localhost') {
       return 'http://localhost:4000/api';
     }
-    // Production environment
-    return 'https://backend-45j4wm4fw-aniketdubey17897-1439s-projects.vercel.app/api';
+    // Production environment - Update with your backend URL
+    // Currently configured as a placeholder - update when backend is deployed
+    return 'https://your-backend-domain.vercel.app/api';
   }
-  return 'https://backend-45j4wm4fw-aniketdubey17897-1439s-projects.vercel.app/api';
+  return 'https://your-backend-domain.vercel.app/api';
 };
 
 export const url: string = getApiUrl();
+
+// Mock API responses for development/demo
+export const ENABLE_MOCK_API = true;
+export const MOCK_DELAY_MS = 300;
